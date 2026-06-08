@@ -38,11 +38,11 @@ spec:
     blueGreen:
       # activeService specifies the service to update with the new template hash at time of promotion.
       # This field is mandatory for the blueGreen update strategy.
-      activeService: rollout-bluegreen-active
+      activeService: color-app-active
       # previewService specifies the service to update with the new template hash before promotion.
       # This allows the preview stack to be reachable without serving production traffic.
       # This field is optional.
-      previewService: rollout-bluegreen-preview
+      previewService: color-app-preview
       # autoPromotionEnabled disables automated promotion of the new stack by pausing the rollout
       # immediately before the promotion. If omitted, the default behavior is to promote the new
       # stack as soon as the ReplicaSet are completely ready/available.
@@ -93,7 +93,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: color-app-service
+  name: color-app-active
   namespace: colors
 spec:
   type: LoadBalancer
@@ -104,7 +104,23 @@ spec:
       name: http
   selector:
     app: color-app
-    version: v1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: color-app-preview
+  namespace: colors
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+      name: http
+  selector:
+    app: color-app
+
 
 ---
 apiVersion: networking.istio.io/v1beta1
@@ -119,12 +135,21 @@ spec:
   gateways:
   - color-app-gateway
   http:
-  - name: "color-app-vs"
-    route:
-      - destination:
-          host: color-app-service.colors.svc.cluster.local
-          port:
-            number: 80
+    - name: "color-app-vs-test"
+      route:
+        - destination:
+            host: color-app-preview.versioning.svc.cluster.local
+            port:
+              number: 80
+      match:
+        - headers:
+            end-user:
+              exact: "test"
+
+    - name: "color-app-vs"
+      route:
+        - destination:
+            host: color-app-active.versioning.svc.cluster.local
 
 ---
 apiVersion: networking.istio.io/v1
