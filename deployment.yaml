@@ -47,7 +47,7 @@ spec:
 #      scaleDownDelaySeconds: 120
 #      previewReplicaCount: 1
     canary:
-      activeService: color-app-active
+      stableService: color-app-active
       canaryService: color-app-preview
       maxSurge: '25%'
       maxUnavailable: 0
