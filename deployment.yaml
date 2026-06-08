@@ -38,7 +38,7 @@ spec:
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
-  paused: true
+  paused: false
   strategy:
 #    blueGreen:
 #      activeService: color-app-active
@@ -53,6 +53,8 @@ spec:
       maxSurge: '25%'
       maxUnavailable: 0
       steps:
+        - setWeight: 0
+        - pause: {} # pause indefinitely
         - setWeight: 10
         - pause:
             duration: 5m
