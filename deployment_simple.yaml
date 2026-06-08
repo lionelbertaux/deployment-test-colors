@@ -47,7 +47,7 @@ spec:
         name: color-app-server
         env:
         - name: COLOR
-          value: cyan
+          value: green
         ports:
         - containerPort: 8080
       terminationGracePeriodSeconds: 30
