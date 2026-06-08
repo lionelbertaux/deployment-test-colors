@@ -29,11 +29,15 @@ spec:
         app: color-app
     spec:
       containers:
-        - name: color-app
-          image: argoproj/rollouts-demo:blue
+        - image: bedis9/colors
           imagePullPolicy: IfNotPresent
+          name: color-app-server
+          env:
+            - name: COLOR
+              value: red
           ports:
             - containerPort: 8080
+      terminationGracePeriodSeconds: 30
   strategy:
     blueGreen:
       # activeService specifies the service to update with the new template hash at time of promotion.
