@@ -1,0 +1,108 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: console
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: color-app
+  name: color-app
+  namespace: colors
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  minReadySeconds: 20 # Allow to wait for at least 20s before deploying the next pod
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: color-app
+  strategy:
+    # type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: color-app
+        version: v1
+    spec:
+      containers:
+      - image: bedis9/colors
+        imagePullPolicy: IfNotPresent
+        name: color-app-server
+        env:
+        - name: COLOR
+          value: cyan
+        ports:
+        - containerPort: 8080
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: color-app-service
+  namespace: colors
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+      name: http
+  selector:
+    app: color-app
+    version: v1
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: color-app-vs
+  namespace: colors
+spec:
+  hosts:
+  # - color-app.test.com
+  - "*"
+  gateways:
+  - color-app-gateway
+  http:
+  - name: "color-app-vs"
+    route:
+      - destination:
+          host: color-app-service.colors.svc.cluster.local
+          port:
+            number: 80
+
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: color-app-gateway
+  namespace: colors
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+      # - "color-app.test.com"
+      - "*"
