@@ -34,7 +34,7 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: cyan
+              value: green
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
@@ -57,21 +57,21 @@ spec:
         - pause: {} # pause indefinitely
         - setWeight: 10
         - pause:
-            duration: 5m
-        - setWeight: 10 # total 20%
+            duration: 2m
+        - setWeight: 20
         - pause:
-            duration: 5m
-        - setWeight: 20 # total 40%
+            duration: 2m
+        - setWeight: 40
         - pause: {} # pause indefinitely
         - pause:
-            duration: 5m
-        - setWeight: 20 # total 60%
+            duration: 2m
+        - setWeight: 60
         - pause:
-            duration: 5m
-        - setWeight: 20 # total 80%
+            duration: 2m
+        - setWeight: 80
         - pause:
-            duration: 5m
-        - setWeight: 20 # total 1000%
+            duration: 2m
+        - setWeight: 100
 
 ---
 apiVersion: v1
