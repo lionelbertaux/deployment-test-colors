@@ -34,7 +34,7 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: green
+              value: blue
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
@@ -54,23 +54,31 @@ spec:
       # Next test if to add analysis to have more tests
       steps:
         - pause: {} # pause before start
-        - setWeight: 1
+        - setWeight: 1 # Only add a pod for tests, not traffic
         - pause: {} # Pause during first tests
-        - setWeight: 10
+        - setCanaryScale:
+            matchTrafficWeight: true
+        - setCanaryScale:
+            weight: 10
         - pause:
             duration: 2m
-        - setWeight: 20
+        - setCanaryScale:
+            weight: 20
         - pause:
             duration: 2m
-        - setWeight: 40
+        - setCanaryScale:
+            weight: 40
         - pause: {} # pause indefinitely
-        - setWeight: 60
+        - setCanaryScale:
+            weight: 60
         - pause:
             duration: 2m
-        - setWeight: 80
+        - setCanaryScale:
+            weight: 80
         - pause:
             duration: 2m
-        - setWeight: 100
+        - setCanaryScale:
+            weight: 100
 
 ---
 apiVersion: v1
