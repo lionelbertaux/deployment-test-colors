@@ -84,8 +84,7 @@ spec:
           virtualService:
             name: color-app-vs
             routes:
-              - color-app-vs
-              - color-app-vs-test
+              - destination
 
 ---
 apiVersion: v1
