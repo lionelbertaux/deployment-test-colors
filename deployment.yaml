@@ -34,7 +34,7 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: cyan
+              value: green
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
@@ -52,6 +52,9 @@ spec:
       # stack as soon as the ReplicaSet are completely ready/available.
       # Rollouts can be resumed using: `kubectl argo rollouts promote ROLLOUT`
       autoPromotionEnabled: false
+      scaleDownDelaySeconds: 120
+      previewReplicaCount: 1
+
 
 ---
 apiVersion: v1
