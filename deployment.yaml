@@ -18,7 +18,7 @@ kind: Rollout
 metadata:
   name: color-deployment
 spec:
-  replicas: 4
+  replicas: 10
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -41,21 +41,24 @@ spec:
   paused: true
   strategy:
     blueGreen:
-      # activeService specifies the service to update with the new template hash at time of promotion.
-      # This field is mandatory for the blueGreen update strategy.
       activeService: color-app-active
-      # previewService specifies the service to update with the new template hash before promotion.
-      # This allows the preview stack to be reachable without serving production traffic.
-      # This field is optional.
       previewService: color-app-preview
-      # autoPromotionEnabled disables automated promotion of the new stack by pausing the rollout
-      # immediately before the promotion. If omitted, the default behavior is to promote the new
-      # stack as soon as the ReplicaSet are completely ready/available.
-      # Rollouts can be resumed using: `kubectl argo rollouts promote ROLLOUT`
       autoPromotionEnabled: false
       scaleDownDelaySeconds: 120
       previewReplicaCount: 1
-
+#    canary:
+#      activeService: color-app-active
+#      previewService: color-app-preview
+#      autoPromotionEnabled: false
+#      scaleDownDelaySeconds: 120
+#      maxSurge: '25%'
+#      maxUnavailable: 0
+#      steps:
+#        - setWeight: 10
+#        - pause:
+#            duration: 5m # 1 hour
+#        - setWeight: 20
+#        - pause: {} # pause indefinitely
 
 ---
 apiVersion: v1
