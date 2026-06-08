@@ -12,45 +12,81 @@ spec:
       - "3600"
     imagePullPolicy: IfNotPresent
 
----
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  labels:
-    app: color-app
-  name: color-app
-  namespace: colors
+  name: color-deployment
 spec:
-  progressDeadlineSeconds: 600
-  replicas: 5
-  minReadySeconds: 20 # Allow to wait for at least 20s before deploying the next pod
-  revisionHistoryLimit: 10
+  replicas: 4
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: color-app
-  strategy:
-    # type: Recreate
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: color-app
-        version: v1
     spec:
       containers:
-      - image: bedis9/colors
-        imagePullPolicy: IfNotPresent
-        name: color-app-server
-        env:
-        - name: COLOR
-          value: green
-        ports:
-        - containerPort: 8080
-      terminationGracePeriodSeconds: 30
+        - name: rollouts-demo
+          image: argoproj/rollouts-demo:blue
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+  strategy:
+    blueGreen:
+      # activeService specifies the service to update with the new template hash at time of promotion.
+      # This field is mandatory for the blueGreen update strategy.
+      activeService: rollout-bluegreen-active
+      # previewService specifies the service to update with the new template hash before promotion.
+      # This allows the preview stack to be reachable without serving production traffic.
+      # This field is optional.
+      previewService: rollout-bluegreen-preview
+      # autoPromotionEnabled disables automated promotion of the new stack by pausing the rollout
+      # immediately before the promotion. If omitted, the default behavior is to promote the new
+      # stack as soon as the ReplicaSet are completely ready/available.
+      # Rollouts can be resumed using: `kubectl argo rollouts promote ROLLOUT`
+      autoPromotionEnabled: false
+
+#---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  labels:
+#    app: color-app
+#  name: color-app
+#  namespace: colors
+#spec:
+#  progressDeadlineSeconds: 600
+#  replicas: 5
+#  minReadySeconds: 20 # Allow to wait for at least 20s before deploying the next pod
+#  revisionHistoryLimit: 10
+#  selector:
+#    matchLabels:
+#      app: color-app
+#  strategy:
+#    # type: Recreate
+#    type: RollingUpdate
+#    rollingUpdate:
+#      maxSurge: 1
+#      maxUnavailable: 0
+#  template:
+#    metadata:
+#      creationTimestamp: null
+#      labels:
+#        app: color-app
+#        version: v1
+#    spec:
+#      containers:
+#      - image: bedis9/colors
+#        imagePullPolicy: IfNotPresent
+#        name: color-app-server
+#        env:
+#        - name: COLOR
+#          value: green
+#        ports:
+#        - containerPort: 8080
+#      terminationGracePeriodSeconds: 30
 
 ---
 apiVersion: v1
