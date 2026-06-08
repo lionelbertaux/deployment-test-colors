@@ -38,6 +38,7 @@ spec:
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
+  paused: true
   strategy:
     blueGreen:
       # activeService specifies the service to update with the new template hash at time of promotion.
