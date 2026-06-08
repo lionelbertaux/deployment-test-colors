@@ -31,7 +31,7 @@ spec:
       containers:
         - name: color-app
           image: argoproj/rollouts-demo:blue
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
   strategy:
@@ -138,7 +138,7 @@ spec:
     - name: "color-app-vs-test"
       route:
         - destination:
-            host: color-app-preview.versioning.svc.cluster.local
+            host: color-app-preview.colors.svc.cluster.local
             port:
               number: 80
       match:
@@ -149,7 +149,7 @@ spec:
     - name: "color-app-vs"
       route:
         - destination:
-            host: color-app-active.versioning.svc.cluster.local
+            host: color-app-active.colors.svc.cluster.local
 
 ---
 apiVersion: networking.istio.io/v1
