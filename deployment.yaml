@@ -79,13 +79,13 @@ spec:
             duration: 2m
         - setCanaryScale:
             weight: 100
-    trafficRouting:
-      istio:
-        virtualService:
-          name: color-app-vs
-          routes:
-            - color-app-vs
-            - color-app-vs-test
+      trafficRouting:
+        istio:
+          virtualService:
+            name: color-app-vs
+            routes:
+              - color-app-vs
+              - color-app-vs-test
 
 ---
 apiVersion: v1
