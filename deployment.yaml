@@ -56,35 +56,49 @@ spec:
         - pause: {} # pause before start
         - setWeight: 1 # Only add a pod for tests, not traffic
         - pause: {} # Pause during first tests
-        - setCanaryScale:
-            matchTrafficWeight: true
-        - setCanaryScale:
-            weight: 10
+        - setWeight: 20
         - pause:
             duration: 2m
-        - setCanaryScale:
-            weight: 20
+        - setWeight: 40
+        - pause: {}
+        - setWeight: 60
         - pause:
             duration: 2m
-        - setCanaryScale:
-            weight: 40
-        - pause: {} # pause indefinitely
-        - setCanaryScale:
-            weight: 60
+        - setWeight: 80
         - pause:
             duration: 2m
-        - setCanaryScale:
-            weight: 80
-        - pause:
-            duration: 2m
-        - setCanaryScale:
-            weight: 100
-      trafficRouting:
-        istio:
-          virtualService:
-            name: color-app-vs
-            routes:
-              - destination
+        - setWeight: 1000
+
+#        - setCanaryScale:
+#            matchTrafficWeight: true
+#        - setCanaryScale:
+#            weight: 10
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 20
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 40
+#        - pause: {} # pause indefinitely
+#        - setCanaryScale:
+#            weight: 60
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 80
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 100
+#      trafficRouting:
+#        istio:
+#          virtualService:
+#            name: color-app-vs
+#            routes:
+#              - color-app-vs
+#              - color-app-vs-test
 
 ---
 apiVersion: v1
