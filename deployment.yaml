@@ -34,11 +34,11 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: green
+              value: blue
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
-  paused: false
+  #paused: false
   strategy:
 #    blueGreen:
 #      activeService: color-app-active
@@ -49,12 +49,12 @@ spec:
     canary:
       activeService: color-app-active
       canaryService: color-app-preview
-      autoPromotionEnabled: false
       maxSurge: '25%'
       maxUnavailable: 0
       steps:
-        - setWeight: 0
-        - pause: {} # pause indefinitely
+        - pause: {} # pause before start
+        - setWeight: 0.01
+        - pause: {} # Pause during first tests
         - setWeight: 10
         - pause:
             duration: 2m
@@ -63,8 +63,6 @@ spec:
             duration: 2m
         - setWeight: 40
         - pause: {} # pause indefinitely
-        - pause:
-            duration: 2m
         - setWeight: 60
         - pause:
             duration: 2m
