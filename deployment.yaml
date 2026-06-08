@@ -40,25 +40,37 @@ spec:
       terminationGracePeriodSeconds: 30
   paused: true
   strategy:
-    blueGreen:
-      activeService: color-app-active
-      previewService: color-app-preview
-      autoPromotionEnabled: false
-      scaleDownDelaySeconds: 120
-      previewReplicaCount: 1
-#    canary:
+#    blueGreen:
 #      activeService: color-app-active
 #      previewService: color-app-preview
 #      autoPromotionEnabled: false
 #      scaleDownDelaySeconds: 120
-#      maxSurge: '25%'
-#      maxUnavailable: 0
-#      steps:
-#        - setWeight: 10
-#        - pause:
-#            duration: 5m # 1 hour
-#        - setWeight: 20
-#        - pause: {} # pause indefinitely
+#      previewReplicaCount: 1
+    canary:
+      activeService: color-app-active
+      canaryService: color-app-preview
+      autoPromotionEnabled: false
+      scaleDownDelaySeconds: 120
+      maxSurge: '25%'
+      maxUnavailable: 0
+      steps:
+        - setWeight: 10
+        - pause:
+            duration: 5m
+        - setWeight: 10 # total 20%
+        - pause:
+            duration: 5m
+        - setWeight: 20 # total 40%
+        - pause: {} # pause indefinitely
+        - pause:
+            duration: 5m
+        - setWeight: 20 # total 60%
+        - pause:
+            duration: 5m
+        - setWeight: 20 # total 80%
+        - pause:
+            duration: 5m
+        - setWeight: 20 # total 1000%
 
 ---
 apiVersion: v1
