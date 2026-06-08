@@ -51,9 +51,10 @@ spec:
       canaryService: color-app-preview
       maxSurge: '25%'
       maxUnavailable: 0
+      # Next test if to add analysis to have more tests
       steps:
         - pause: {} # pause before start
-        - setWeight: 0.01
+        - setWeight: 1
         - pause: {} # Pause during first tests
         - setWeight: 10
         - pause:
