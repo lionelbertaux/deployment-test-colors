@@ -12,6 +12,7 @@ spec:
       - "3600"
     imagePullPolicy: IfNotPresent
 
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -28,7 +29,7 @@ spec:
         app: color-app
     spec:
       containers:
-        - name: rollouts-demo
+        - name: color-app
           image: argoproj/rollouts-demo:blue
           imagePullPolicy: Always
           ports:
