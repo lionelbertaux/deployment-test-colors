@@ -34,7 +34,7 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: blue
+              value: green
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
@@ -79,25 +79,40 @@ spec:
 #        - pause: {}
         - setCanaryScale:
             weight: 10
+        - pause: {}
+        - setWeight: 20
         - pause:
             duration: 2m
-        - setCanaryScale:
-            weight: 20
+        - setWeight: 40
+        - pause: {}
+        - setWeight: 60
         - pause:
             duration: 2m
-        - setCanaryScale:
-            weight: 40
-        - pause: {} # pause indefinitely
-        - setCanaryScale:
-            weight: 60
+        - setWeight: 80
         - pause:
             duration: 2m
-        - setCanaryScale:
-            weight: 80
-        - pause:
-            duration: 2m
-        - setCanaryScale:
-            weight: 100
+        - setWeight: 100
+#        - setCanaryScale:
+#            weight: 10
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 20
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 40
+#        - pause: {} # pause indefinitely
+#        - setCanaryScale:
+#            weight: 60
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 80
+#        - pause:
+#            duration: 2m
+#        - setCanaryScale:
+#            weight: 100
       trafficRouting:
         istio:
           virtualService:
