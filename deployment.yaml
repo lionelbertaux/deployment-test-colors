@@ -34,7 +34,7 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: cyan
+              value: green
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
@@ -80,9 +80,9 @@ spec:
         - setCanaryScale:
             weight: 10 # Allow to deploy preview service
         - pause: {}
+        - setWeight: 20
         - setCanaryScale:
             matchTrafficWeight: true
-        - setWeight: 20
         - pause:
             duration: 2m
         - setWeight: 40
