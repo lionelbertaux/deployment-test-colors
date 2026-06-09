@@ -150,14 +150,6 @@ spec:
   gateways:
   - color-app-gateway
   http:
-    - name: "color-app-route-tc"
-      route:
-        - destination:
-            host: color-app-preview
-          weight: 0
-        - destination:
-            host: color-app-active
-          weight: 100
     - name: "color-app-route-preview"
       route:
         - destination:
@@ -168,6 +160,14 @@ spec:
         - headers:
             end-user:
               exact: "test"
+    - name: "color-app-route-tc"
+      route:
+        - destination:
+            host: color-app-preview
+          weight: 0
+        - destination:
+            host: color-app-active
+          weight: 100
     - name: "color-app-route"
       route:
         - destination:
