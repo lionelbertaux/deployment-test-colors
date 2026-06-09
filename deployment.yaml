@@ -75,11 +75,8 @@ spec:
       steps:
         - pause: {}
         - setCanaryScale:
-            matchTrafficWeight: false
-        - setWeight: 1
+            replicas: 1
         - pause: {}
-        - setCanaryScale:
-            matchTrafficWeight: true
         - setCanaryScale:
             weight: 10
         - pause:
