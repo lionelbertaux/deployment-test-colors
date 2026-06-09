@@ -34,7 +34,7 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: red
+              value: blue
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
@@ -73,12 +73,10 @@ spec:
       stableService: color-app-active
       canaryService: color-app-preview
       steps:
-        - pause: {}
-        - setCanaryScale:
-            replicas: 1
-        - pause: {}
-        - setCanaryScale:
-            matchTrafficWeight: true
+#        - pause: {}
+#        - setCanaryScale:
+#            replicas: 1
+#        - pause: {}
         - setCanaryScale:
             weight: 10
         - pause:
