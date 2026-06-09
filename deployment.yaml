@@ -34,11 +34,11 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: blue
+              value: green
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
-  #paused: false
+  paused: true
   strategy:
     blueGreen:
       activeService: color-app-active
