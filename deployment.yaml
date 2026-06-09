@@ -47,17 +47,17 @@ spec:
 #      scaleDownDelaySeconds: 120
 #      previewReplicaCount: 1
     canary:
-      stableService: color-app-active
-      canaryService: color-app-preview
+#      stableService: color-app-active
+#      canaryService: color-app-preview
       maxSurge: '25%'
       maxUnavailable: 0
       # Next test if to add analysis to have more tests
       steps:
-        - setCanaryScale:
-            matchTrafficWeight: true
+
         - pause: {} # pause before start
         - setWeight: 1 # Only add a pod for tests, not traffic
         - pause: {} # Pause during first tests
+        # does not seem to work properly, traffic is switch as the end
         - setWeight: 20
         - pause:
             duration: 2m
