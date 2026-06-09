@@ -1,16 +1,16 @@
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: console
-spec:
-  containers:
-  - name: busybox
-    image: busybox
-    command:
-      - sleep
-      - "3600"
-    imagePullPolicy: IfNotPresent
+#---
+#apiVersion: v1
+#kind: Pod
+#metadata:
+#  name: console
+#spec:
+#  containers:
+#  - name: busybox
+#    image: busybox
+#    command:
+#      - sleep
+#      - "3600"
+#    imagePullPolicy: IfNotPresent
 
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -34,43 +34,43 @@ spec:
           name: color-app-server
           env:
             - name: COLOR
-              value: green
+              value: blue
           ports:
             - containerPort: 8080
       terminationGracePeriodSeconds: 30
   #paused: false
   strategy:
-#    blueGreen:
-#      activeService: color-app-active
-#      previewService: color-app-preview
-#      autoPromotionEnabled: false
-#      scaleDownDelaySeconds: 120
-#      previewReplicaCount: 1
-    canary:
+    blueGreen:
+      activeService: color-app-active
+      previewService: color-app-preview
+      autoPromotionEnabled: false
+      scaleDownDelaySeconds: 60
+      previewReplicaCount: 1
+#    canary:
+#      maxSurge: '25%'
+#      maxUnavailable: 0
+#      # Next test if to add analysis to have more tests
+#      steps:
+#        - pause: {} # pause before start
+#        - setWeight: 1 # Only add a pod for tests, not traffic
+#        - pause: {} # Pause during first tests
+#        # does not seem to work properly, traffic is switch as the end
+#        - setWeight: 20
+#        - pause:
+#            duration: 2m
+#        - setWeight: 40
+#        - pause: {}
+#        - setWeight: 60
+#        - pause:
+#            duration: 2m
+#        - setWeight: 80
+#        - pause:
+#            duration: 2m
+#        - setWeight: 100
+
+      # Services are only required for Traffic Control
 #      stableService: color-app-active
 #      canaryService: color-app-preview
-      maxSurge: '25%'
-      maxUnavailable: 0
-      # Next test if to add analysis to have more tests
-      steps:
-
-        - pause: {} # pause before start
-        - setWeight: 1 # Only add a pod for tests, not traffic
-        - pause: {} # Pause during first tests
-        # does not seem to work properly, traffic is switch as the end
-        - setWeight: 20
-        - pause:
-            duration: 2m
-        - setWeight: 40
-        - pause: {}
-        - setWeight: 60
-        - pause:
-            duration: 2m
-        - setWeight: 80
-        - pause:
-            duration: 2m
-        - setWeight: 100
-
 #        - setCanaryScale:
 #            matchTrafficWeight: true
 #        - setCanaryScale:
