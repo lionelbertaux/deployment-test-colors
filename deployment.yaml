@@ -79,6 +79,7 @@ spec:
         - pause: {}
         - setCanaryScale:
             weight: 10
+            matchTrafficWeight: true
         - pause:
             duration: 2m
         - setCanaryScale:
