@@ -74,6 +74,8 @@ spec:
       canaryService: color-app-preview
       steps:
         - pause: {}
+        - setCanaryScale:
+            matchTrafficWeight: false
         - setWeight: 1
         - setCanaryScale:
             matchTrafficWeight: true
